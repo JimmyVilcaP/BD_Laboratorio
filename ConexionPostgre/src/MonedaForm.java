@@ -30,6 +30,7 @@ public class MonedaForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         getRootPane().setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setLocationRelativeTo(null);
 
         tfMonEstado.setEditable(false);
 
@@ -77,7 +78,7 @@ public class MonedaForm extends JFrame {
             flagActualizar = 1;
             tabla.clearSelection();
             tabla.setEnabled(false);
-            bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+            bloquearBotonesExcepto(btnAdicionar, btnActualizar, btnCancelar, btnSalir);
         });
 
         btnModificar.addActionListener(e -> {
@@ -90,7 +91,7 @@ public class MonedaForm extends JFrame {
                 operacion = "modificar";
                 flagActualizar = 1;
                 tabla.setEnabled(true);
-                bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnModificar, btnActualizar, btnCancelar, btnSalir);
             }
         });
 
@@ -106,7 +107,7 @@ public class MonedaForm extends JFrame {
                 operacion = "eliminar";
                 flagActualizar = 1;
                 tabla.setEnabled(true);
-                bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnEliminar, btnActualizar, btnCancelar, btnSalir);
             }
         });
 
@@ -120,7 +121,7 @@ public class MonedaForm extends JFrame {
                 operacion = "inactivar";
                 flagActualizar = 1;
                 tabla.setEnabled(true);
-                bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnInactivar, btnActualizar, btnCancelar, btnSalir);
             }
         });
 
@@ -134,7 +135,7 @@ public class MonedaForm extends JFrame {
                 operacion = "reactivar";
                 flagActualizar = 1;
                 tabla.setEnabled(true);
-                bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnReactivar, btnActualizar, btnCancelar, btnSalir);
             }
         });
 
@@ -151,7 +152,7 @@ public class MonedaForm extends JFrame {
 
         btnSalir.addActionListener(e -> {
             dispose();
-            new MenuPrincipal();
+            new MenuReferencial();
         });
 
         tabla.addMouseListener(new MouseAdapter() {

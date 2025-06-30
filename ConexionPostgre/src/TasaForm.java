@@ -4,11 +4,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
-import org.jdatepicker.impl.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.jdatepicker.impl.*;
 
 public class TasaForm extends JFrame {
     JComboBox<String> cbProducto = new JComboBox<>();
@@ -38,10 +39,11 @@ public class TasaForm extends JFrame {
 
     public TasaForm() {
         setTitle("Mantenimiento de Tasa");
-        setSize(750, 600);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         getRootPane().setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setLocationRelativeTo(null);
 
         tfEstado.setEditable(false);
 
@@ -95,9 +97,10 @@ public class TasaForm extends JFrame {
             limpiarCampos();
             operacion = "adicionar";
             flagActualizar = 1;
+            habilitarCamposEdicion();
             tabla.clearSelection();
             tabla.setEnabled(false);
-            bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+            bloquearBotonesExcepto(btnAdicionar, btnActualizar, btnCancelar, btnSalir);
         });
 
         btnModificar.addActionListener(e -> {
@@ -108,10 +111,87 @@ public class TasaForm extends JFrame {
                 tfDescripcion.setText(modelo.getValueAt(fila, 2).toString());
                 tfTasa.setText(modelo.getValueAt(fila, 3).toString());
                 tfPlazoDias.setText(modelo.getValueAt(fila, 4).toString());
+                Date fechaIni = (Date) modelo.getValueAt(fila, 5);
+                Date fechaFin = (Date) modelo.getValueAt(fila, 6);
+
+                Calendar calInicio = Calendar.getInstance();
+                calInicio.setTime(fechaIni);
+                dateInicio.getModel().setDate(calInicio.get(Calendar.YEAR), calInicio.get(Calendar.MONTH), calInicio.get(Calendar.DAY_OF_MONTH));
+                dateInicio.getModel().setSelected(true);
+
+                Calendar calFin = Calendar.getInstance();
+                calFin.setTime(fechaFin);
+                dateFin.getModel().setDate(calFin.get(Calendar.YEAR), calFin.get(Calendar.MONTH), calFin.get(Calendar.DAY_OF_MONTH));
+                dateFin.getModel().setSelected(true);
+                tfEstado.setText(modelo.getValueAt(fila, 7).toString());
+                habilitarCamposEdicion();
                 operacion = "modificar";
                 flagActualizar = 1;
                 tabla.setEnabled(true);
-                bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnModificar, btnActualizar, btnCancelar, btnSalir);
+            }
+        });
+
+        btnEliminar.addActionListener(e -> {
+            int fila = tabla.getSelectedRow();
+            if (fila >= 0) {
+                idSeleccionado = Integer.parseInt(modelo.getValueAt(fila, 0).toString());
+                tfIdentificador.setText(modelo.getValueAt(fila, 1).toString());
+                tfDescripcion.setText(modelo.getValueAt(fila, 2).toString());
+                tfTasa.setText(modelo.getValueAt(fila, 3).toString());
+                tfPlazoDias.setText(modelo.getValueAt(fila, 4).toString());
+                dateInicio.getModel().setDate(((Date) modelo.getValueAt(fila, 5)).getYear() + 1900, ((Date) modelo.getValueAt(fila, 5)).getMonth(), ((Date) modelo.getValueAt(fila, 5)).getDate());
+                dateInicio.getModel().setSelected(true);
+                dateFin.getModel().setDate(((Date) modelo.getValueAt(fila, 6)).getYear() + 1900, ((Date) modelo.getValueAt(fila, 6)).getMonth(), ((Date) modelo.getValueAt(fila, 6)).getDate());
+                dateFin.getModel().setSelected(true);
+                tfEstado.setText(modelo.getValueAt(fila, 7).toString());
+                deshabilitarCamposEdicion();
+                operacion = "eliminar";
+                flagActualizar = 1;
+                tabla.setEnabled(true);
+                bloquearBotonesExcepto(btnEliminar, btnActualizar, btnCancelar, btnSalir);
+            }
+        });
+
+        btnInactivar.addActionListener(e -> {
+            int fila = tabla.getSelectedRow();
+            if (fila >= 0) {
+                idSeleccionado = Integer.parseInt(modelo.getValueAt(fila, 0).toString());
+                tfIdentificador.setText(modelo.getValueAt(fila, 1).toString());
+                tfDescripcion.setText(modelo.getValueAt(fila, 2).toString());
+                tfTasa.setText(modelo.getValueAt(fila, 3).toString());
+                tfPlazoDias.setText(modelo.getValueAt(fila, 4).toString());
+                dateInicio.getModel().setDate(((Date) modelo.getValueAt(fila, 5)).getYear() + 1900, ((Date) modelo.getValueAt(fila, 5)).getMonth(), ((Date) modelo.getValueAt(fila, 5)).getDate());
+                dateInicio.getModel().setSelected(true);
+                dateFin.getModel().setDate(((Date) modelo.getValueAt(fila, 6)).getYear() + 1900, ((Date) modelo.getValueAt(fila, 6)).getMonth(), ((Date) modelo.getValueAt(fila, 6)).getDate());
+                dateFin.getModel().setSelected(true);
+                tfEstado.setText(modelo.getValueAt(fila, 7).toString());
+                deshabilitarCamposEdicion();
+                operacion = "inactivar";
+                flagActualizar = 1;
+                tabla.setEnabled(true);
+                bloquearBotonesExcepto(btnInactivar, btnActualizar, btnCancelar, btnSalir);
+            }
+        });
+
+        btnReactivar.addActionListener(e -> {
+            int fila = tabla.getSelectedRow();
+            if (fila >= 0) {
+                idSeleccionado = Integer.parseInt(modelo.getValueAt(fila, 0).toString());
+                tfIdentificador.setText(modelo.getValueAt(fila, 1).toString());
+                tfDescripcion.setText(modelo.getValueAt(fila, 2).toString());
+                tfTasa.setText(modelo.getValueAt(fila, 3).toString());
+                tfPlazoDias.setText(modelo.getValueAt(fila, 4).toString());
+                dateInicio.getModel().setDate(((Date) modelo.getValueAt(fila, 5)).getYear() + 1900, ((Date) modelo.getValueAt(fila, 5)).getMonth(), ((Date) modelo.getValueAt(fila, 5)).getDate());
+                dateInicio.getModel().setSelected(true);
+                dateFin.getModel().setDate(((Date) modelo.getValueAt(fila, 6)).getYear() + 1900, ((Date) modelo.getValueAt(fila, 6)).getMonth(), ((Date) modelo.getValueAt(fila, 6)).getDate());
+                dateFin.getModel().setSelected(true);
+                tfEstado.setText(modelo.getValueAt(fila, 7).toString());
+                deshabilitarCamposEdicion();
+                operacion = "reactivar";
+                flagActualizar = 1;
+                tabla.setEnabled(true);
+                bloquearBotonesExcepto(btnReactivar, btnActualizar, btnCancelar, btnSalir);
             }
         });
 
@@ -123,16 +203,43 @@ public class TasaForm extends JFrame {
             operacion = "";
             idSeleccionado = -1;
             tabla.setEnabled(true);
+            cbProducto.setEnabled(true);
             desbloquearTodosLosBotones();
         });
 
         btnSalir.addActionListener(e -> {
             dispose();
-            new MenuPrincipal();
+            new MenuReferencial();
         });
 
-        
         setVisible(true);
+    }
+
+    void habilitarCamposEdicion() {
+    tfIdentificador.setEditable(true);
+    tfDescripcion.setEditable(true);
+    tfTasa.setEditable(true);
+    tfPlazoDias.setEditable(true);
+    cbProducto.setEnabled(true);
+    }
+
+    void deshabilitarCamposEdicion() {
+    tfIdentificador.setEditable(false);
+    tfDescripcion.setEditable(false);
+    tfTasa.setEditable(false);
+    tfPlazoDias.setEditable(false);
+    cbProducto.setEnabled(false);
+    }
+
+    void prepararOperacion(String op) {
+        int fila = tabla.getSelectedRow();
+        if (fila >= 0) {
+            idSeleccionado = Integer.parseInt(modelo.getValueAt(fila, 0).toString());
+            operacion = op;
+            flagActualizar = 1;
+            tabla.setEnabled(true);
+            bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+        }
     }
 
     void listarDatos() {
@@ -162,8 +269,7 @@ public class TasaForm extends JFrame {
         cbProducto.removeAllItems();
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(
-                 "SELECT p.pro_cod, p.pro_iden FROM producto p " +
-                 "WHERE NOT EXISTS (SELECT 1 FROM tasa t WHERE t.pro_cod = p.pro_cod)")) {
+                     "SELECT p.pro_cod, p.pro_iden FROM producto p WHERE NOT EXISTS (SELECT 1 FROM tasa t WHERE t.pro_cod = p.pro_cod)")) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int pro_cod = rs.getInt("pro_cod");
@@ -175,46 +281,74 @@ public class TasaForm extends JFrame {
             JOptionPane.showMessageDialog(this, "Error cargando productos: " + e.getMessage());
         }
     }
-    
+
     void actualizar() {
         if (flagActualizar == 1) {
             try (Connection conn = ConexionDB.conectar()) {
                 Date fechaIni = (Date) dateInicio.getModel().getValue();
                 Date fechaFin = (Date) dateFin.getModel().getValue();
-
                 if (fechaIni == null || fechaFin == null || fechaFin.before(fechaIni)) {
                     JOptionPane.showMessageDialog(this, "⚠ Las fechas no son válidas.");
                     return;
                 }
 
-                String seleccionado = (String) cbProducto.getSelectedItem();
-                if (seleccionado == null || !productosDisponibles.containsKey(seleccionado)) {
-                    JOptionPane.showMessageDialog(this, "⚠ Debes seleccionar un producto válido.");
-                    return;
+                PreparedStatement ps;
+                switch (operacion) {
+                    case "adicionar":
+                        String seleccionado = (String) cbProducto.getSelectedItem();
+                        if (seleccionado == null || !productosDisponibles.containsKey(seleccionado)) {
+                            JOptionPane.showMessageDialog(this, "⚠ Selecciona un producto válido.");
+                            return;
+                        }
+                        int pro_cod = productosDisponibles.get(seleccionado);
+                        ps = conn.prepareStatement("INSERT INTO tasa (pro_cod, tas_iden, tas_desc, tas_tasa, tas_plaz_dias, tas_ini_fec, tas_fin_fec, tas_estado) VALUES (?, ?, ?, ?, ?, ?, ?, 'A')");
+                        ps.setInt(1, pro_cod);
+                        ps.setString(2, tfIdentificador.getText());
+                        ps.setString(3, tfDescripcion.getText());
+                        ps.setDouble(4, Double.parseDouble(tfTasa.getText()));
+                        ps.setInt(5, Integer.parseInt(tfPlazoDias.getText()));
+                        ps.setDate(6, new java.sql.Date(fechaIni.getTime()));
+                        ps.setDate(7, new java.sql.Date(fechaFin.getTime()));
+                        ps.executeUpdate();
+                        break;
+                    case "modificar":
+                        ps = conn.prepareStatement("UPDATE tasa SET tas_iden=?, tas_desc=?, tas_tasa=?, tas_plaz_dias=?, tas_ini_fec=?, tas_fin_fec=? WHERE pro_cod = ?");
+                        ps.setString(1, tfIdentificador.getText());
+                        ps.setString(2, tfDescripcion.getText());
+                        ps.setDouble(3, Double.parseDouble(tfTasa.getText()));
+                        ps.setInt(4, Integer.parseInt(tfPlazoDias.getText()));
+                        ps.setDate(5, new java.sql.Date(fechaIni.getTime()));
+                        ps.setDate(6, new java.sql.Date(fechaFin.getTime()));
+                        ps.setInt(7, idSeleccionado);
+                        ps.executeUpdate();
+                        break;
+                    case "eliminar":
+                        ps = conn.prepareStatement("UPDATE tasa SET tas_estado='*' WHERE pro_cod = ?");
+                        ps.setInt(1, idSeleccionado);
+                        ps.executeUpdate();
+                        break;
+                    case "inactivar":
+                        ps = conn.prepareStatement("UPDATE tasa SET tas_estado='I' WHERE pro_cod = ?");
+                        ps.setInt(1, idSeleccionado);
+                        ps.executeUpdate();
+                        break;
+                    case "reactivar":
+                        ps = conn.prepareStatement("UPDATE tasa SET tas_estado='A' WHERE pro_cod = ?");
+                        ps.setInt(1, idSeleccionado);
+                        ps.executeUpdate();
+                        break;
                 }
-
-                int pro_cod = productosDisponibles.get(seleccionado);
-
-                String sql = "INSERT INTO tasa (pro_cod, tas_iden, tas_desc, tas_tasa, tas_plaz_dias, tas_ini_fec, tas_fin_fec, tas_estado) VALUES (?, ?, ?, ?, ?, ?, ?, 'A')";
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setInt(1, pro_cod);
-                ps.setString(2, tfIdentificador.getText());
-                ps.setString(3, tfDescripcion.getText());
-                ps.setDouble(4, Double.parseDouble(tfTasa.getText()));
-                ps.setInt(5, Integer.parseInt(tfPlazoDias.getText()));
-                ps.setDate(6, new java.sql.Date(fechaIni.getTime()));
-                ps.setDate(7, new java.sql.Date(fechaFin.getTime()));
-                ps.executeUpdate();
 
                 listarDatos();
                 limpiarCampos();
-                cargarProductosSinTasa(); // actualiza combo
+                cargarProductosSinTasa();
                 flagActualizar = 0;
                 operacion = "";
                 idSeleccionado = -1;
+                cbProducto.setEnabled(true);
                 tabla.setEnabled(true);
                 desbloquearTodosLosBotones();
-                JOptionPane.showMessageDialog(this, "✅ Tasa registrada con éxito");
+                JOptionPane.showMessageDialog(this, "✅ Acción realizada correctamente");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage());
             }
@@ -228,6 +362,7 @@ public class TasaForm extends JFrame {
         tfPlazoDias.setText("");
         tfEstado.setText("A");
         cbProducto.setSelectedIndex(-1);
+        cbProducto.setEnabled(true);
     }
 
     void bloquearBotonesExcepto(JButton... permitidos) {

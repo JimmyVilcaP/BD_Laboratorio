@@ -30,6 +30,7 @@ public class RolForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         getRootPane().setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setLocationRelativeTo(null);
 
         tfRolEstado.setEditable(false);
 
@@ -149,7 +150,7 @@ public class RolForm extends JFrame {
 
         btnSalir.addActionListener(e -> {
             dispose();
-            new MenuPrincipal();
+            new MenuReferencial();
         });
 
         tabla.addMouseListener(new MouseAdapter() {

@@ -1,59 +1,59 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 public class MenuPrincipal extends JFrame {
     public MenuPrincipal() {
-        setTitle("Menú Principal del Sistema de Cooperativa");
+        setTitle("");
         setSize(400, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centrar ventana
+        setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new GridLayout(0, 1, 10, 10));
-        panel.setBorder(BorderFactory.createTitledBorder("Tablas Referenciales"));
+        panel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEtchedBorder(),
+            "MENÚ PRINCIPAL",
+            TitledBorder.CENTER,
+            TitledBorder.DEFAULT_POSITION,
+            null
+        ));
 
-        JButton btnRol = new JButton("🧑‍💼 Rol");
-        JButton btnMoneda = new JButton("💰 Moneda");
-        JButton btnTipoProducto = new JButton("📦 Tipo de Producto");
-        JButton btnUbicacion = new JButton("📍 Ubicación");
-        JButton btnTasa = new JButton("% Tasa");
-        JButton btnSalir = new JButton("🚪 Salir");
+        JButton btnReferenciales = new JButton("Tablas Referenciales");
+        JButton btnMaestras = new JButton("Tablas Maestras");
+        JButton btnTransacciones = new JButton("Tablas Transaccionales");
+        JButton btnSeguridad = new JButton("Control de Seguridad");
+        JButton btnSalir = new JButton("Salir");
 
-        panel.add(btnRol);
-        panel.add(btnMoneda);
-        panel.add(btnTipoProducto);
-        panel.add(btnUbicacion);
-        panel.add(btnTasa);
+        panel.add(btnReferenciales);
+        panel.add(btnMaestras);
+        panel.add(btnTransacciones);
+        panel.add(btnSeguridad);
         panel.add(btnSalir);
 
         add(panel);
 
-        // Acciones
-        btnRol.addActionListener(e -> {
+        btnReferenciales.addActionListener(e -> {
             dispose();
-            new RolForm();
+            new MenuReferencial();
         });
-        btnMoneda.addActionListener(e -> {
+
+        btnMaestras.addActionListener(e -> {
             dispose();
-            new MonedaForm();
+            new MenuMaestras();
         });
-        btnTipoProducto.addActionListener(e -> {
+
+        btnTransacciones.addActionListener(e -> {
             dispose();
-            new TipoProductoForm();
+            new MenuTransacciones();
         });
-        btnUbicacion.addActionListener(e -> {
+
+        btnSeguridad.addActionListener(e -> {
             dispose();
-            new UbicacionForm();
+            new MenuSeguridad();
         });
-        btnTasa.addActionListener(e -> {
-            dispose();
-            new TasaForm();
-        });
+
         btnSalir.addActionListener(e -> System.exit(0));
 
         setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new MenuPrincipal();
     }
 }

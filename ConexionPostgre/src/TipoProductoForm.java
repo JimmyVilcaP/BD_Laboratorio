@@ -29,6 +29,7 @@ public class TipoProductoForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         getRootPane().setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setLocationRelativeTo(null);
 
         tfTipProEstado.setEditable(false);
 
@@ -75,7 +76,7 @@ public class TipoProductoForm extends JFrame {
             flagActualizar = 1;
             tabla.clearSelection();
             tabla.setEnabled(false);
-            bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+            bloquearBotonesExcepto(btnAdicionar, btnActualizar, btnCancelar, btnSalir);
         });
 
         btnModificar.addActionListener(e -> {
@@ -87,7 +88,7 @@ public class TipoProductoForm extends JFrame {
                 operacion = "modificar";
                 flagActualizar = 1;
                 tabla.setEnabled(true);
-                bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnModificar, btnActualizar, btnCancelar, btnSalir);
             }
         });
 
@@ -101,7 +102,7 @@ public class TipoProductoForm extends JFrame {
                 operacion = "eliminar";
                 flagActualizar = 1;
                 tabla.setEnabled(true);
-                bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnEliminar, btnActualizar, btnCancelar, btnSalir);
             }
         });
 
@@ -114,7 +115,7 @@ public class TipoProductoForm extends JFrame {
                 operacion = "inactivar";
                 flagActualizar = 1;
                 tabla.setEnabled(true);
-                bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnInactivar, btnActualizar, btnCancelar, btnSalir);
             }
         });
 
@@ -127,7 +128,7 @@ public class TipoProductoForm extends JFrame {
                 operacion = "reactivar";
                 flagActualizar = 1;
                 tabla.setEnabled(true);
-                bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnReactivar, btnActualizar, btnCancelar, btnSalir);
             }
         });
 
@@ -144,7 +145,7 @@ public class TipoProductoForm extends JFrame {
 
         btnSalir.addActionListener(e -> {
             dispose();
-            new MenuPrincipal();
+            new MenuReferencial();
         });
 
         tabla.addMouseListener(new MouseAdapter() {
