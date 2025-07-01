@@ -7,7 +7,7 @@ public class UsuarioRolForm extends JFrame {
     private JComboBox<String> cbUsuarios = new JComboBox<>();
     private JPanel panelRoles = new JPanel(new GridLayout(0, 1));
     private JButton btnGuardar = new JButton("Guardar Cambios");
-    private JButton btnSalir = new JButton("Salir");
+    private JButton btnVolver = new JButton("Volver");
 
     private Map<String, Integer> mapUsuarios = new HashMap<>();
     private Map<String, Integer> mapRoles = new HashMap<>();
@@ -30,7 +30,7 @@ public class UsuarioRolForm extends JFrame {
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelBotones.add(btnGuardar);
-        panelBotones.add(btnSalir);
+        panelBotones.add(btnVolver);
         add(panelBotones, BorderLayout.SOUTH);
 
         cargarUsuarios();
@@ -38,7 +38,10 @@ public class UsuarioRolForm extends JFrame {
 
         cbUsuarios.addActionListener(e -> cargarRolesDelUsuario());
         btnGuardar.addActionListener(e -> guardarCambios());
-        btnSalir.addActionListener(e -> dispose());
+        btnVolver.addActionListener(e -> {
+            dispose();
+            new MenuSeguridad();
+        });;
 
         setVisible(true);
     }

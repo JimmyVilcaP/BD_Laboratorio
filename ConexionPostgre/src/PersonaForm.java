@@ -42,7 +42,7 @@ public class PersonaForm extends JFrame {
     JButton btnReactivar = new JButton("Reactivar");
     JButton btnActualizar = new JButton("Actualizar");
     JButton btnCancelar = new JButton("Cancelar");
-    JButton btnSalir = new JButton("Salir");
+    JButton btnVolver = new JButton("Volver");
 
     public PersonaForm() {
         cbCooperativa.setEditable(false);
@@ -68,7 +68,6 @@ public class PersonaForm extends JFrame {
 
         int y = 0;
 
-        // Columna izquierda (campos de texto)
         gbc.gridx = 0; gbc.gridy = y; panelRegistro.add(new JLabel("Identificador:"), gbc);
         gbc.gridx = 1; panelRegistro.add(tfIdentificador, gbc); y++;
 
@@ -96,7 +95,6 @@ public class PersonaForm extends JFrame {
         gbc.gridx = 0; gbc.gridy = y; panelRegistro.add(new JLabel("Estado:"), gbc);
         gbc.gridx = 1; panelRegistro.add(tfEstado, gbc);
 
-        // Columna derecha (foto vista previa)
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.gridheight = y + 1;
@@ -119,7 +117,7 @@ public class PersonaForm extends JFrame {
         panelBotones.add(btnReactivar);
         panelBotones.add(btnActualizar);
         panelBotones.add(btnCancelar);
-        panelBotones.add(btnSalir);
+        panelBotones.add(btnVolver);
 
         modelo = new DefaultTableModel(new String[]{"ID", "Identificador", "Paterno", "Materno", "Nombre", "Nacimiento", "Correo", "Estado"}, 0) {
             public boolean isCellEditable(int row, int column) { return false; }
@@ -144,7 +142,10 @@ public class PersonaForm extends JFrame {
         btnActualizar.addActionListener(e -> actualizar());
 
         btnCancelar.addActionListener(e -> cancelarOperacion());
-        btnSalir.addActionListener(e -> dispose());
+        btnVolver.addActionListener(e -> {
+            dispose();
+            new MenuMaestras();
+        });
 
         setVisible(true);
     }
@@ -249,7 +250,7 @@ public class PersonaForm extends JFrame {
         } else {
             limpiarCampos();
         }
-        bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+        bloquearBotonesExcepto(btnActualizar, btnCancelar, btnVolver);
     }
 
     void actualizar() {
@@ -315,13 +316,13 @@ public class PersonaForm extends JFrame {
     }
 
     void bloquearBotonesExcepto(JButton... permitidos) {
-        JButton[] botones = {btnAdicionar, btnModificar, btnEliminar, btnInactivar, btnReactivar, btnActualizar, btnCancelar, btnSalir};
+        JButton[] botones = {btnAdicionar, btnModificar, btnEliminar, btnInactivar, btnReactivar, btnActualizar, btnCancelar, btnVolver};
         for (JButton b : botones) b.setEnabled(false);
         for (JButton b : permitidos) b.setEnabled(true);
     }
 
     void desbloquearTodosLosBotones() {
-        JButton[] botones = {btnAdicionar, btnModificar, btnEliminar, btnInactivar, btnReactivar, btnActualizar, btnCancelar, btnSalir};
+        JButton[] botones = {btnAdicionar, btnModificar, btnEliminar, btnInactivar, btnReactivar, btnActualizar, btnCancelar, btnVolver};
         for (JButton b : botones) b.setEnabled(true);
     }
 

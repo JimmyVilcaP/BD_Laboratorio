@@ -10,10 +10,9 @@ public class UsuarioForm extends JFrame {
     JTextField tfPassword = new JTextField(15);
     JTextField tfEstado = new JTextField("A", 1);
     JComboBox<String> cbPersona = new JComboBox<>();
-    JComboBox<String> cbCooperativa = new JComboBox<>();
+    JTextField cbCooperativa = new JTextField();
     JTextField tfRoles = new JTextField();
     Map<String, Integer> personas = new LinkedHashMap<>();
-    Map<String, Integer> cooperativas = new LinkedHashMap<>();
 
     JTable tabla;
     DefaultTableModel modelo;
@@ -28,7 +27,7 @@ public class UsuarioForm extends JFrame {
     JButton btnReactivar = new JButton("Reactivar");
     JButton btnActualizar = new JButton("Actualizar");
     JButton btnCancelar = new JButton("Cancelar");
-    JButton btnSalir = new JButton("Salir");
+    JButton btnVolver = new JButton("Volver");
 
     public UsuarioForm() {
         setTitle("Mantenimiento de Usuario");
@@ -40,6 +39,7 @@ public class UsuarioForm extends JFrame {
 
         tfEstado.setEditable(false);
         tfRoles.setEditable(false);
+        cbCooperativa.setEditable(false);
 
         JPanel panelRegistro = new JPanel(new GridLayout(7, 2, 10, 10));
         panelRegistro.setBorder(BorderFactory.createTitledBorder("Datos del Usuario"));
@@ -66,7 +66,7 @@ public class UsuarioForm extends JFrame {
         panelBotones.add(btnReactivar);
         panelBotones.add(btnActualizar);
         panelBotones.add(btnCancelar);
-        panelBotones.add(btnSalir);
+        panelBotones.add(btnVolver);
 
         modelo = new DefaultTableModel(new String[]{"ID", "Usuario", "Identificador", "Estado"}, 0) {
             public boolean isCellEditable(int row, int column) {
@@ -81,7 +81,6 @@ public class UsuarioForm extends JFrame {
         add(panelBotones, BorderLayout.SOUTH);
 
         cargarPersonas();
-        cargarCooperativas();
         listarUsuarios();
 
         btnAdicionar.addActionListener(e -> {
@@ -89,7 +88,7 @@ public class UsuarioForm extends JFrame {
             operacion = "adicionar";
             flagActualizar = 1;
             tabla.clearSelection();
-            bloquearBotonesExcepto(btnAdicionar, btnActualizar, btnCancelar, btnSalir);
+            bloquearBotonesExcepto(btnAdicionar, btnActualizar, btnCancelar, btnVolver);
         });
 
         btnModificar.addActionListener(e -> {
@@ -100,10 +99,11 @@ public class UsuarioForm extends JFrame {
                 tfIdentificador.setText((String) modelo.getValueAt(fila, 2));
                 tfEstado.setText((String) modelo.getValueAt(fila, 3));
                 cargarPersonaCooperativa(idSeleccionado);
+                cbCooperativa.setText("MICREDIVISION");
                 cargarRoles(idSeleccionado);
                 operacion = "modificar";
                 flagActualizar = 1;
-                bloquearBotonesExcepto(btnModificar, btnActualizar, btnCancelar, btnSalir);
+                bloquearBotonesExcepto(btnModificar, btnActualizar, btnCancelar, btnVolver);
             }
         });
 
@@ -113,7 +113,10 @@ public class UsuarioForm extends JFrame {
 
         btnActualizar.addActionListener(e -> actualizar());
         btnCancelar.addActionListener(e -> limpiarCampos());
-        btnSalir.addActionListener(e -> dispose());
+        btnVolver.addActionListener(e -> {
+            dispose();
+            new MenuMaestras();
+        });;
 
         setVisible(true);
     }
@@ -135,26 +138,23 @@ public class UsuarioForm extends JFrame {
         }
     }
 
-    void cargarCooperativas() {
-        cbCooperativa.removeAllItems();
-        cooperativas.clear();
+    void cargarPersonaCooperativa(int usu_cod) {
         try (Connection conn = ConexionDB.conectar();
-             PreparedStatement ps = conn.prepareStatement("SELECT coo_cod, coo_nom FROM cooperativa")) {
+            PreparedStatement ps = conn.prepareStatement("SELECT per_cod FROM usuario WHERE usu_cod=?")) {
+            ps.setInt(1, usu_cod);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                String nombre = rs.getString("coo_nom");
-                int id = rs.getInt("coo_cod");
-                cooperativas.put(nombre, id);
-                cbCooperativa.addItem(nombre);
+            if (rs.next()) {
+                int personaId = rs.getInt("per_cod");
+                for (Map.Entry<String, Integer> entry : personas.entrySet()) {
+                    if (entry.getValue() == personaId) {
+                        cbPersona.setSelectedItem(entry.getKey());
+                        break;
+                    }
+                }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error cargando cooperativas: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al cargar persona asociada: " + e.getMessage());
         }
-    }
-
-    void cargarPersonaCooperativa(int usu_cod) {
-        // Este método debe consultar y seleccionar la persona y cooperativa asociadas al usuario
-        // Implementar según tu modelo exacto
     }
 
     void cargarRoles(int usu_cod) {
@@ -196,9 +196,10 @@ public class UsuarioForm extends JFrame {
             tfIdentificador.setText((String) modelo.getValueAt(fila, 2));
             tfEstado.setText((String) modelo.getValueAt(fila, 3));
             cargarRoles(idSeleccionado);
+            cbCooperativa.setText("MICREDIVISION");
             operacion = op;
             flagActualizar = 1;
-            bloquearBotonesExcepto(btnActualizar, btnCancelar, btnSalir);
+            bloquearBotonesExcepto(btnActualizar, btnCancelar, btnVolver);
         }
     }
 
@@ -210,7 +211,7 @@ public class UsuarioForm extends JFrame {
                 ps.setString(1, tfIdentificador.getText());
                 ps.setString(2, tfUsuario.getText());
                 ps.setString(3, tfPassword.getText());
-                ps.setInt(4, cooperativas.get((String) cbCooperativa.getSelectedItem()));
+                ps.setInt(4, 1);
                 ps.setInt(5, personas.get((String) cbPersona.getSelectedItem()));
                 ps.executeUpdate();
             } else if (operacion.equals("modificar")) {
@@ -219,7 +220,7 @@ public class UsuarioForm extends JFrame {
                 ps.setString(1, tfIdentificador.getText());
                 ps.setString(2, tfUsuario.getText());
                 ps.setString(3, tfPassword.getText());
-                ps.setInt(4, cooperativas.get((String) cbCooperativa.getSelectedItem()));
+                ps.setInt(4, 1);
                 ps.setInt(5, personas.get((String) cbPersona.getSelectedItem()));
                 ps.setInt(6, idSeleccionado);
                 ps.executeUpdate();
@@ -251,7 +252,7 @@ public class UsuarioForm extends JFrame {
         tfEstado.setText("A");
         tfRoles.setText("");
         cbPersona.setSelectedIndex(0);
-        cbCooperativa.setSelectedIndex(0);
+        cbCooperativa.setText("");;
         flagActualizar = 0;
         operacion = "";
         idSeleccionado = -1;
@@ -259,13 +260,13 @@ public class UsuarioForm extends JFrame {
     }
 
     void bloquearBotonesExcepto(JButton... permitidos) {
-        JButton[] todos = {btnAdicionar, btnModificar, btnEliminar, btnInactivar, btnReactivar, btnActualizar, btnCancelar, btnSalir};
+        JButton[] todos = {btnAdicionar, btnModificar, btnEliminar, btnInactivar, btnReactivar, btnActualizar, btnCancelar, btnVolver};
         for (JButton b : todos) b.setEnabled(false);
         for (JButton b : permitidos) b.setEnabled(true);
     }
 
     void desbloquearTodosLosBotones() {
-        JButton[] todos = {btnAdicionar, btnModificar, btnEliminar, btnInactivar, btnReactivar, btnActualizar, btnCancelar, btnSalir};
+        JButton[] todos = {btnAdicionar, btnModificar, btnEliminar, btnInactivar, btnReactivar, btnActualizar, btnCancelar, btnVolver};
         for (JButton b : todos) b.setEnabled(true);
     }
 } 
