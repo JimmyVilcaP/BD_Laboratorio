@@ -10,6 +10,9 @@ CREATE DATABASE bd_cooperativapost;
 
 RECORDAR MODIFICAR ConexionPostgre/src/ConexionDB.java y colocar su contraseña de  postgres
 
+Y RECORDAR crear en SQLshell(psql):
+CREATE DATABASE bd_cooperativapost;
+
 ESTO SI:
 
 1.DESDE TERMINAL:
