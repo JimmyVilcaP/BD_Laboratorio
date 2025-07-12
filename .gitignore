@@ -1,0 +1,3 @@
+# Ignora todos los archivos .class en la carpeta bin/ del proyecto
+ConexionPostgre/bin/*.class
+ConexionPostgre/src/ConexionDB.java

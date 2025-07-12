@@ -6,7 +6,7 @@ public class ConexionDB {
     public static Connection conectar() throws SQLException {
         String url = "jdbc:postgresql://localhost:5432/bd_cooperativapost";
         String user = "postgres";
-        String pass = "123QWASZX";
+        String pass = "7410";
         return DriverManager.getConnection(url, user, pass);
     }
 }
