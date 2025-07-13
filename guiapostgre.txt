@@ -8,12 +8,13 @@ CREATE DATABASE bd_cooperativapost;
 \c bd_cooperativapost
 \i 'C:/Users/TIJERO/Desktop/BD_Laboratorio/bdprueba.sql'
 
+ESTO SI:
+
 RECORDAR MODIFICAR ConexionPostgre/src/ConexionDB.java y colocar su contraseña de  postgres
 
 Y RECORDAR crear en SQLshell(psql):
 CREATE DATABASE bd_cooperativapost;
 
-ESTO SI:
 
 1.DESDE TERMINAL:
 pg_restore -U postgres -d bd_cooperativapost "C:\Users\TIJERO\Desktop\BD_Laboratorio\bdprueba.sql"
@@ -42,3 +43,7 @@ Este error es inofensivo y solo indica que no se pudo volver a crear un esquema 
 
 javac -d bin -cp "lib/*" src/*.java
 java -cp "bin;lib/*" Main (en windows) / java -cp "bin:lib/*" Main (en linux)
+
+Git pull para aceptar cambios y eliminaciones
+Esto restablece el estado del directorio ConexionPostgre/bin/ según la rama remota.
+git restore --source=origin/master --staged --worktree ConexionPostgre/bin/

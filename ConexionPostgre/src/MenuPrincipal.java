@@ -12,7 +12,7 @@ public class MenuPrincipal extends JFrame {
         JPanel panel = new JPanel(new GridLayout(0, 1, 10, 10));
         panel.setBorder(BorderFactory.createTitledBorder(
             BorderFactory.createEtchedBorder(),
-            "MENÚ PRINCIPAL",
+            "MENÚ REGISTRO",
             TitledBorder.CENTER,
             TitledBorder.DEFAULT_POSITION,
             null
@@ -22,7 +22,7 @@ public class MenuPrincipal extends JFrame {
         JButton btnMaestras = new JButton("Tablas Maestras");
         JButton btnTransacciones = new JButton("Tablas Transaccionales");
         JButton btnSeguridad = new JButton("Control de Seguridad");
-        JButton btnSalir = new JButton("Salir");
+        JButton btnSalir = new JButton("Volver");
 
         panel.add(btnReferenciales);
         panel.add(btnMaestras);
@@ -52,7 +52,10 @@ public class MenuPrincipal extends JFrame {
             new MenuSeguridad();
         });
 
-        btnSalir.addActionListener(e -> System.exit(0));
+        btnSalir.addActionListener(e -> {
+            dispose();
+            new Menu();
+        });
 
         setVisible(true);
     }
